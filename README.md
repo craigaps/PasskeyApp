@@ -50,7 +50,7 @@ The next steps allow your users to authenticate to ISV.  In the passkey_app, res
    xed .
    ```
 
-2. In the project **Signing & Capabilities**, update the following settings:
+2. In the project **Signing & Capabilities**, update the following settings to suit your development environment:
    - Bundle Identifier
    - Provisioning Profile
    - Associated Domains
@@ -61,7 +61,7 @@ The next steps allow your users to authenticate to ISV.  In the passkey_app, res
    Ensure an `apple-app-site-association` (AASA) file is present on your domain in the .well-known directory, and that it contains an entry for this app’s App ID for the webcredentials service.  For example:
      ```
      "webcredentials": {
-        "apps": [ "PP64RT7P8Z.com.ibm.test1" ]
+        "apps": [ "TEAM.com.company.app" ]
     }
     ```
 3. Open the **passkey_appApp** file
