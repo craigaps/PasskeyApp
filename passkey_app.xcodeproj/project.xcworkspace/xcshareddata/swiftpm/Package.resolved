@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "verify-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ibm-security-verify/verify-sdk-ios",
+      "state" : {
+        "branch" : "main",
+        "revision" : "aeaa9194c1c82e83ab1facc1919a77f6a72b80f9"
+      }
+    }
+  ],
+  "version" : 2
+}
