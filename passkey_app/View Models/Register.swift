@@ -13,10 +13,8 @@ import Authentication
 
 class Register: NSObject, ObservableObject {
     private var authenticationAnchor: ASPresentationAnchor?
-    private let domain = "milano.dev.verify.ibmcloudsecurity.com"
-    private let userId = "604000470T"
-    private let attestationOptionsUri = URL(string: "\(Login.baseUrl)/v2.0/factors/fido2/relyingparties/\(Register.relyingPartyId)/attestation/options")!
-    private let attestationResultUri = URL(string: "\(Login.baseUrl)/v2.0/factors/fido2/relyingparties/\(Register.relyingPartyId)/attestation/result")!
+    private let attestationOptionsUri = URL(string: "\(baseUrl)/v2.0/factors/fido2/relyingparties/\(relyingPartyId)/attestation/options")!
+    private let attestationResultUri = URL(string: "\(baseUrl)/v2.0/factors/fido2/relyingparties/\(relyingPartyId)/attestation/result")!
     
     @AppStorage("token") var token: String = String()
     @AppStorage("isRegistered") var isRegistered: Bool = false
@@ -41,8 +39,8 @@ class Register: NSObject, ObservableObject {
             return
         }
         
-        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: domain)
-        let request = provider.createCredentialRegistrationRequest(challenge: Data(base64Encoded: challenge)!, name: nickname, userID: Data(self.userId.utf8))
+        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingParty)
+        let request = provider.createCredentialRegistrationRequest(challenge: Data(base64Encoded: challenge)!, name: nickname, userID: Data(userId.utf8))
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
         controller.presentationContextProvider = self
@@ -57,7 +55,7 @@ class Register: NSObject, ObservableObject {
         let json = """
         {
             "displayName": "\(self.nickname)",
-            "userId": "\(self.userId)"
+            "userId": "\(userId)"
         }
         """
         print("Attestation Options Request:\n\t\(json)")

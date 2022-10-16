@@ -10,14 +10,13 @@ import SwiftUI
 import Authentication
 
 class Login: ObservableObject {
-    private let clientId = "0637679e-e3a0-4320-921f-798520481fa7"
-    private let tokenUri = URL(string: "\(Login.baseUrl)/v1.0/endpoint/default/token")!
+    private let tokenUri = URL(string: "\(baseUrl)/v1.0/endpoint/default/token")!
     
     @AppStorage("token") var token: String = String()
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     @AppStorage("isRegistered") var isRegistered: Bool = false
     
-    @Published var username: String = "craigaps@au1.ibm.com"
+    @Published var username: String = "fido_tester"
     @Published var password: String = String()
     @Published var errorMessage: String = String()
     @Published var navigate: Bool = false
@@ -49,8 +48,6 @@ class Login: ObservableObject {
         
         return result
     }
-    
-    static let baseUrl = "https://milano.dev.verify.ibmcloudsecurity.com"
 }
 
 extension String: Error {}

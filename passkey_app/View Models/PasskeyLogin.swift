@@ -13,10 +13,8 @@ import Authentication
 
 class PasskeyLogin: NSObject, ObservableObject {
     private var authenticationAnchor: ASPresentationAnchor?
-    private let domain = "milano.dev.verify.ibmcloudsecurity.com"
-    private let userId = "604000470T"
-    private let asertionOptionsUri = URL(string: "\(Login.baseUrl)/v2.0/factors/fido2/relyingparties/\(Register.relyingPartyId)/assertion/options")!
-    private let assertionResultUri = URL(string: "\(Login.baseUrl)/v2.0/factors/fido2/relyingparties/\(Register.relyingPartyId)/assertion/result")!
+    private let asertionOptionsUri = URL(string: "\(baseUrl)/v2.0/factors/fido2/relyingparties/\(relyingPartyId)/assertion/options")!
+    private let assertionResultUri = URL(string: "\(baseUrl)/v2.0/factors/fido2/relyingparties/\(relyingPartyId)/assertion/result")!
     
     @AppStorage("token") var token: String = String()
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
@@ -41,7 +39,7 @@ class PasskeyLogin: NSObject, ObservableObject {
             return
         }
         
-        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: domain)
+        let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingParty)
         let request = provider.createCredentialAssertionRequest(challenge: Data(base64Encoded: challenge)!)
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
@@ -53,7 +51,7 @@ class PasskeyLogin: NSObject, ObservableObject {
     func reset() {
         self.isLoggedIn = false
         self.isRegistered = false
-        self.token = String()
+        self.token = ""
         self.navigate = true
     }
     
@@ -64,7 +62,7 @@ class PasskeyLogin: NSObject, ObservableObject {
         
         let json = """
         {
-            "userId": "\(self.userId)"
+            "userId": "\(userId)"
         }
         """
         print("Assertion Options Request:\n\t\(json)")
@@ -136,8 +134,6 @@ class PasskeyLogin: NSObject, ObservableObject {
         
         try await URLSession.shared.dataTask(for: resource)
     }
-    
-    static let relyingPartyId = "4d100a38-4daf-4013-bb68-4b2137b2ca03"
 }
 
 extension PasskeyLogin: ASAuthorizationControllerDelegate {

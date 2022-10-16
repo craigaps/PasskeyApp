@@ -25,7 +25,7 @@ class Passkey: ObservableObject {
     func reset() {
         self.isLoggedIn = false
         self.isRegistered = false
-        self.token = String()
+        self.token = ""
         self.navigate = true
     }
 }
