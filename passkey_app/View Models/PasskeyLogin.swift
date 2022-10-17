@@ -62,7 +62,6 @@ class PasskeyLogin: NSObject, ObservableObject {
         
         let json = """
         {
-            "userId": "\(userId)"
         }
         """
         print("Assertion Options Request:\n\t\(json)")
