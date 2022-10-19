@@ -13,7 +13,7 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "person")
+            Image(systemName: "person.badge.key.fill")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
                 .font(.system(size: 32))
