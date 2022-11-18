@@ -32,7 +32,7 @@ struct PasskeyLoginView: View {
                             .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: self.isProcessing)
                             .opacity(self.isProcessing ? 1 : 0)
                         
-                        Text("Login")
+                        Text("Login with Passkey")
                             .opacity(self.isProcessing ? 0 : 1)
                             .frame(maxWidth:.infinity)
                     }

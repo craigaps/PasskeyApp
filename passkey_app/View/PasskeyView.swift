@@ -16,7 +16,10 @@ struct PasskeyView: View {
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
                 .font(.system(size: 32))
-            
+            Text("Welcome, \($model.username.wrappedValue)")
+                .font(.title2)
+                .foregroundColor(.black)
+                .padding(2)
             VStack {
                 Button(action: {
                     self.model.logout()

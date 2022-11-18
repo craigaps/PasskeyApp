@@ -14,6 +14,13 @@ class Passkey: ObservableObject {
     @AppStorage("isRegistered") var isRegistered: Bool = false
     
     @Published var navigate: Bool = false
+    @Published var username: String = String()
+    
+    init() {
+        if let token = Login.fetchTokenInfo(token: token), let idToken = token.idToken, let claims = try? decode(jwtToken: idToken) {
+            self.username = claims["name"] as? String ?? "User"
+        }
+    }
     
     @MainActor
     func logout() {

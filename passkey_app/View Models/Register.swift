@@ -7,14 +7,12 @@
 
 import Foundation
 import SwiftUI
-import Core
 import AuthenticationServices
-import Authentication
+import RelyingPartyKit
 
 class Register: NSObject, ObservableObject {
     private var authenticationAnchor: ASPresentationAnchor?
-    private let attestationOptionsUri = URL(string: "\(baseUrl)/v2.0/factors/fido2/relyingparties/\(relyingPartyId)/attestation/options")!
-    private let attestationResultUri = URL(string: "\(baseUrl)/v2.0/factors/fido2/relyingparties/\(relyingPartyId)/attestation/result")!
+    private let client = RelyingPartyClient(baseURL: URL(string: "https://\(relyingParty)")!)
     
     @AppStorage("token") var token: String = String()
     @AppStorage("isRegistered") var isRegistered: Bool = false
@@ -30,8 +28,9 @@ class Register: NSObject, ObservableObject {
         
         do {
             challenge = try await fetchAttestationChallenge()
-            challenge = challenge.base64UrlEncodedStringWithPadding // The challenge needs to be Base64Url encoded, because rawClientDataJSON will do this.  Otherwise your FIDO server won't match the challenges.
-            print("Challenge:\n\t\(challenge)")
+            // The challenge needs to be Base64Url encoded, because rawClientDataJSON will do this.  Otherwise your FIDO server won't match the challenges.
+            challenge = challenge.base64UrlEncodedStringWithPadding
+            print("Attestation challenge: \(challenge)")
         }
         catch let error {
             self.errorMessage = error.localizedDescription
@@ -39,8 +38,17 @@ class Register: NSObject, ObservableObject {
             return
         }
         
+        // Get the UserId from the id_token
+        var userId = UUID().uuidString
+        var username: String = "User"
+        
+        if let token = Login.fetchTokenInfo(token: token), let idToken = token.idToken, let claims = try? decode(jwtToken: idToken) {
+            userId = claims["sub"] as! String
+            username = claims["name"] as? String ?? "User"
+        }
+        
         let provider = ASAuthorizationPlatformPublicKeyCredentialProvider(relyingPartyIdentifier: relyingParty)
-        let request = provider.createCredentialRegistrationRequest(challenge: Data(base64Encoded: challenge)!, name: nickname, userID: Data(userId.utf8))
+        let request = provider.createCredentialRegistrationRequest(challenge: Data(base64Encoded: challenge)!, name: username, userID: Data(userId.utf8))
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
         controller.presentationContextProvider = self
@@ -52,97 +60,35 @@ class Register: NSObject, ObservableObject {
             throw "Invalid access token."
         }
         
-        let json = """
-        {
-            "displayName": "\(self.nickname)",
-            "userId": "\(userId)"
-        }
-        """
-        print("Attestation Options Request:\n\t\(json)")
-        let body = Data(json.utf8)
-        
-        // Construct the request and parsing method.
-        let resource = HTTPResource<String>(.post, url: self.attestationOptionsUri, accept: .json, contentType: .json, body: body, headers: ["Authorization": token.authorizationHeader]) { data, response in
-            guard let data = data else {
-                return Result.failure("Unable to fetch attestation options.")
-            }
-            
-            print("Attestation Options Response:\n\t\(String(data: data, encoding: .utf8)!)")
-            
-            // Parse out the userId and challenge from the attestation options.
-            do {
-                let dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                if let challenge = dictionary!["challenge"] as? String {
-                    return Result.success(challenge)
-                }
-            }
-            catch let error {
-                return Result.failure(error)
-            }
-            
-            return Result.failure("No challenge found.")
-        }
-        
-        return try await URLSession.shared.dataTask(for: resource)
+        let result = try await client.challenge(type: .attestation, displayName: self.nickname, token: token)
+        return result.challenge
     }
+
     
     func createCredential(registration: ASAuthorizationPlatformPublicKeyCredentialRegistration) async throws {
         guard let token = Login.fetchTokenInfo(token: token) else {
             throw "Invalid access token."
         }
         
-        // Create the attestation result request data.
-        let json = """
-        {
-            "type": "public-key",
-            "enabled": "true",
-            "id": "\(registration.credentialID.base64UrlEncodedString(options: [.safeUrlCharacters]))",
-            "rawId": "\(registration.credentialID.base64UrlEncodedString(options: [.safeUrlCharacters]))",
-            "nickname": "\(self.nickname)",
-            "response": {
-                "clientDataJSON": "\(registration.rawClientDataJSON.base64UrlEncodedString())",
-                "attestationObject": "\(registration.rawAttestationObject!.base64UrlEncodedString(options: [.safeUrlCharacters]))"
-            }
-        }
-        """
+        print(String(decoding: registration.rawClientDataJSON, as: UTF8.self))
         
-        print("Attestation Result Request (payload):\n\t\(json)")
-        let body = Data(json.utf8)
-        
-        // Create the request to the FIDO service to register the credential
-        let resource = HTTPResource<Void>(.post, url: self.attestationResultUri, accept: .json, contentType: .json, body: body, headers: ["Authorization": token.authorizationHeader]) { data, response in
-            if let httpRepsonse = response as? HTTPURLResponse, httpRepsonse.statusCode > 200 {
-                return Result.failure("Unable to complete registration.")
-            }
-            
-            let json = try? JSONSerialization.jsonObject(with: data!, options: [])
-            let jsonData = try? JSONSerialization.data(withJSONObject: json!, options: [.prettyPrinted])
-            let prettyPrintedString = String(data: jsonData!, encoding: .utf8)
-
-            print("Attestation Result Request:\n\t\(prettyPrintedString!)")
-            
-            return Result.success(())
-        }
-        
-        try await URLSession.shared.dataTask(for: resource)
+        try await client.register(nickname: self.nickname,
+                                               clientDataJSON: registration.rawClientDataJSON,
+                                               attestationObject: registration.rawAttestationObject!,
+                                               credentialId: registration.credentialID,
+                                               token: token)
     }
-    
-    static let relyingPartyId = "4d100a38-4daf-4013-bb68-4b2137b2ca03"
 }
 
 extension Register: ASAuthorizationControllerDelegate {
     @MainActor
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let credential = authorization.credential as? ASAuthorizationPlatformPublicKeyCredentialRegistration {
-            // Verify the attestationObject and clientDataJSON with your service.
-            // The attestationObject contains the user's new public key to store and use for subsequent sign-ins.
-            // let attestationObject = credentialRegistration.rawAttestationObject
-            // let clientDataJSON = credentialRegistration.rawClientDataJSON
-            
             // After the server verifies the registration and creates the user account, sign in the user with the new account.
             Task {
                 do {
                     try await createCredential(registration: credential)
+                     
                     self.isRegistered = true
                     self.navigate = true
                 }
@@ -177,7 +123,6 @@ extension Register: ASAuthorizationControllerDelegate {
         self.isPresentingErrorAlert = true
     }
 }
-
 
 extension Register: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {

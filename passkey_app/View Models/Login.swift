@@ -7,16 +7,16 @@
 
 import Foundation
 import SwiftUI
-import Authentication
+import RelyingPartyKit
 
 class Login: ObservableObject {
-    private let tokenUri = URL(string: "\(baseUrl)/v1.0/endpoint/default/token")!
+    private let client = RelyingPartyClient(baseURL: URL(string: "https://\(relyingParty)")!)
     
     @AppStorage("token") var token: String = String()
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     @AppStorage("isRegistered") var isRegistered: Bool = false
     
-    @Published var username: String = "fido_tester"
+    @Published var username: String = "scott"
     @Published var password: String = String()
     @Published var errorMessage: String = String()
     @Published var navigate: Bool = false
@@ -24,10 +24,8 @@ class Login: ObservableObject {
     
     @MainActor
     func login() async {
-        let provider = OAuthProvider(clientId: clientId)
-        
         do {
-            let result = try await provider.authorize(issuer: tokenUri, username: username, password: password)
+            let result = try await client.authenticate(username: username, password: password)
             let data = try JSONEncoder().encode(result)
             
             self.token = String(data: data, encoding: .utf8)!
@@ -41,13 +39,11 @@ class Login: ObservableObject {
         }
     }
     
-    static func fetchTokenInfo(token: String) -> TokenInfo? {
-        guard let data = token.data(using: .utf8), let result = try? JSONDecoder().decode(TokenInfo.self, from: data) else {
+    static func fetchTokenInfo(token: String) -> Token? {
+        guard let data = token.data(using: .utf8), let result = try? JSONDecoder().decode(Token.self, from: data) else {
             return nil
         }
         
         return result
     }
 }
-
-extension String: Error {}

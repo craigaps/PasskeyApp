@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:milano.dev.verify.ibmcloudsecurity.com?mode=developer</string>
+		<string>webcredentials:rps-app.vb76iz9iykg.au-syd.codeengine.appdomain.cloud</string>
 	</array>
 </dict>
 </plist>

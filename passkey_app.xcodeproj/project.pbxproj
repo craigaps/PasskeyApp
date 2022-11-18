@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		44435FC42926FEE800D4FAB7 /* RelyingPartyKit in Frameworks */ = {isa = PBXBuildFile; productRef = 44435FC32926FEE800D4FAB7 /* RelyingPartyKit */; };
 		44804B5228F574B900F0EEB0 /* passkey_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44804B5128F574B900F0EEB0 /* passkey_appApp.swift */; };
 		44804B5428F574B900F0EEB0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44804B5328F574B900F0EEB0 /* ContentView.swift */; };
 		44804B5628F574B900F0EEB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44804B5528F574B900F0EEB0 /* Assets.xcassets */; };
@@ -19,7 +20,6 @@
 		44804B7228F593B200F0EEB0 /* PasskeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44804B7128F593B200F0EEB0 /* PasskeyView.swift */; };
 		4487CFF428F9132700176D8C /* PasskeyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4487CFF328F9132700176D8C /* PasskeyLoginView.swift */; };
 		4487CFF628F91E0700176D8C /* PasskeyLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4487CFF528F91E0700176D8C /* PasskeyLogin.swift */; };
-		4490219128FB99780040399A /* Authentication in Frameworks */ = {isa = PBXBuildFile; productRef = 4490219028FB99780040399A /* Authentication */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4490219128FB99780040399A /* Authentication in Frameworks */,
+				44435FC42926FEE800D4FAB7 /* RelyingPartyKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +128,7 @@
 			);
 			name = passkey_app;
 			packageProductDependencies = (
-				4490219028FB99780040399A /* Authentication */,
+				44435FC32926FEE800D4FAB7 /* RelyingPartyKit */,
 			);
 			productName = passkey_app;
 			productReference = 44804B4E28F574B900F0EEB0 /* passkey_app.app */;
@@ -159,7 +159,7 @@
 			);
 			mainGroup = 44804B4528F574B900F0EEB0;
 			packageReferences = (
-				4490218F28FB99780040399A /* XCRemoteSwiftPackageReference "verify-sdk-ios" */,
+				44435FC22926FEE800D4FAB7 /* XCRemoteSwiftPackageReference "relyingpartykit" */,
 			);
 			productRefGroup = 44804B4F28F574B900F0EEB0 /* Products */;
 			projectDirPath = "";
@@ -324,29 +324,31 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = passkey_app/passkey_app.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"passkey_app/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PP64RT7P8Z;
+				DEVELOPMENT_TEAM = Q7W47GFKL3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Passkey Example";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ibm.test1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ibm.passkey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "@IBM Mobile Team APNs Enabled Dev App - Dev Prof";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -368,12 +370,14 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PP64RT7P8Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Passkey Example";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -383,6 +387,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "@IBM Mobile Team APNs Enabled Dev App - Dev Prof";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -413,9 +420,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		4490218F28FB99780040399A /* XCRemoteSwiftPackageReference "verify-sdk-ios" */ = {
+		44435FC22926FEE800D4FAB7 /* XCRemoteSwiftPackageReference "relyingpartykit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ibm-security-verify/verify-sdk-ios";
+			repositoryURL = "https://github.com/craigaps/relyingpartykit";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -424,10 +431,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4490219028FB99780040399A /* Authentication */ = {
+		44435FC32926FEE800D4FAB7 /* RelyingPartyKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4490218F28FB99780040399A /* XCRemoteSwiftPackageReference "verify-sdk-ios" */;
-			productName = Authentication;
+			package = 44435FC22926FEE800D4FAB7 /* XCRemoteSwiftPackageReference "relyingpartykit" */;
+			productName = RelyingPartyKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

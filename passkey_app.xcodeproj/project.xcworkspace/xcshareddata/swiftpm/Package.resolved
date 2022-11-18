@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "verify-sdk-ios",
+      "identity" : "relyingpartykit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ibm-security-verify/verify-sdk-ios",
+      "location" : "https://github.com/craigaps/relyingpartykit",
       "state" : {
         "branch" : "main",
-        "revision" : "aeaa9194c1c82e83ab1facc1919a77f6a72b80f9"
+        "revision" : "6fde3db5f14420aae2c58a07958ef4cb494b277a"
       }
     }
   ],
