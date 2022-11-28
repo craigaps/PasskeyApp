@@ -3,7 +3,7 @@ An implementation of Apple Passkeys with IBM Security Verify as the relying part
 
 
 ## Prerequisites
-The rplying party in this sample app is IBM Security Verify (ISV).  Create a free trial tenant here:
+The relying party in this sample app is IBM Security Verify (ISV).  Create a free trial tenant here:
 https://www.ibm.com/account/reg/us-en/signup?formid=urx-30041.  You'll need to have an IBMid but this can be done at the same time.
 
 This link explains setting up your tenant:
