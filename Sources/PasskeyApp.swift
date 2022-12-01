@@ -1,14 +1,13 @@
 //
-//  passkey_appApp.swift
-//  passkey_app
+// PasskeyApp.swift
 //
-//  Created by Craig Pearson on 11/10/2022.
+// Copyright contributors to the PasskeyApp
 //
 
 import SwiftUI
 
 @main
-struct passkey_appApp: App {
+struct PasskeyApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -17,7 +16,7 @@ struct passkey_appApp: App {
 }
 
 // MARK: Constants
-let relyingParty = "rps-app.vb76iz9iykg.au-syd.codeengine.appdomain.cloud"
+let relyingParty = "example.com"
 
 // MARK: Helper Functions
 func decode(jwtToken jwt: String) throws -> [String: Any] {

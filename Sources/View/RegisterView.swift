@@ -1,14 +1,13 @@
 //
-//  PasskeyLoginView.swift
-//  passkey_app
+// RegisterView.swift
 //
-//  Created by Craig Pearson on 14/10/2022.
+// Copyright contributors to the PasskeyApp
 //
 
 import SwiftUI
 
-struct PasskeyLoginView: View {
-    @StateObject var model: PasskeyLogin = PasskeyLogin()
+struct RegisterView: View {
+    @StateObject var model: Register = Register()
     @State var isProcessing: Bool = false
     
     var body: some View {
@@ -19,12 +18,19 @@ struct PasskeyLoginView: View {
                 .font(.system(size: 32))
             
             VStack {
+                TextField("Nickname", text: $model.nickname)
+                    .frame(minHeight: 28)
+                    .padding(10)
+                    .overlay(RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color(.systemGray5), lineWidth: 1))
+                    .padding([.bottom], 100)
+                
                 Button(action: {
-                    Task {
-                        self.isProcessing.toggle()
-                        await model.passwordless()
-                        self.isProcessing.toggle()
-                    }
+                   Task {
+                       self.isProcessing.toggle()
+                       await self.model.register()
+                       self.isProcessing.toggle()
+                   }
                 }) {
                     ZStack {
                         Image("busy")
@@ -32,7 +38,7 @@ struct PasskeyLoginView: View {
                             .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: self.isProcessing)
                             .opacity(self.isProcessing ? 1 : 0)
                         
-                        Text("Login with Passkey")
+                        Text("Register")
                             .opacity(self.isProcessing ? 0 : 1)
                             .frame(maxWidth:.infinity)
                     }
@@ -51,19 +57,6 @@ struct PasskeyLoginView: View {
                 .foregroundColor(.white)
                 .background(.blue)
                 .cornerRadius(8)
-                
-                Button {
-                    self.model.reset()
-                } label: {
-                    Text("Reset")
-                        .fontWeight(.medium)
-                        .foregroundColor(.red)
-                        .frame(maxWidth:.infinity)
-                }
-                .fullScreenCover(isPresented: $model.navigate) {
-                    ContentView()
-                }
-                .padding(.top)
             }
             .padding()
         }
@@ -71,8 +64,8 @@ struct PasskeyLoginView: View {
     }
 }
 
-struct PasskeyLoginView_Previews: PreviewProvider {
+struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        PasskeyLoginView()
+        RegisterView()
     }
 }

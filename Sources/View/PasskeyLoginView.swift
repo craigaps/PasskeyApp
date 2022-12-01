@@ -1,14 +1,13 @@
 //
-//  LoginView.swift
-//  passkey_app
+// PasskeyLoginView.swift
 //
-//  Created by Craig Pearson on 11/10/2022.
+// Copyright contributors to the PasskeyApp
 //
 
 import SwiftUI
 
-struct LoginView: View {
-    @StateObject var model: Login = Login()
+struct PasskeyLoginView: View {
+    @StateObject var model: PasskeyLogin = PasskeyLogin()
     @State var isProcessing: Bool = false
     
     var body: some View {
@@ -19,22 +18,10 @@ struct LoginView: View {
                 .font(.system(size: 32))
             
             VStack {
-                TextField("Username", text: $model.username)
-                    .frame(minHeight: 28)
-                    .padding(10)
-                    .overlay(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(.systemGray5), lineWidth: 1))
-                SecureField("Password", text: $model.password)
-                    .frame(minHeight: 28)
-                    .padding(10)
-                    .overlay(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(.systemGray5), lineWidth: 1))
-                    .padding([.bottom], 100)
-                
                 Button(action: {
                     Task {
                         self.isProcessing.toggle()
-                        await model.login()
+                        await model.passwordless()
                         self.isProcessing.toggle()
                     }
                 }) {
@@ -44,14 +31,14 @@ struct LoginView: View {
                             .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: self.isProcessing)
                             .opacity(self.isProcessing ? 1 : 0)
                         
-                        Text("Login")
+                        Text("Login with Passkey")
                             .opacity(self.isProcessing ? 0 : 1)
                             .frame(maxWidth:.infinity)
                     }
                 }
                 .disabled(self.isProcessing)
                 .fullScreenCover(isPresented: $model.navigate) {
-                    RegisterView()
+                    PasskeyView()
                 }
                 .alert(isPresented: $model.isPresentingErrorAlert,
                     content: {
@@ -63,6 +50,19 @@ struct LoginView: View {
                 .foregroundColor(.white)
                 .background(.blue)
                 .cornerRadius(8)
+                
+                Button {
+                    self.model.reset()
+                } label: {
+                    Text("Reset")
+                        .fontWeight(.medium)
+                        .foregroundColor(.red)
+                        .frame(maxWidth:.infinity)
+                }
+                .fullScreenCover(isPresented: $model.navigate) {
+                    ContentView()
+                }
+                .padding(.top)
             }
             .padding()
         }
@@ -70,8 +70,8 @@ struct LoginView: View {
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
+struct PasskeyLoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        PasskeyLoginView()
     }
 }

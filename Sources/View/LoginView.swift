@@ -1,14 +1,13 @@
 //
-//  RegisterView.swift
-//  passkey_app
+// LoginView.swift
 //
-//  Created by Craig Pearson on 11/10/2022.
+// Copyright contributors to the PasskeyApp
 //
 
 import SwiftUI
 
-struct RegisterView: View {
-    @StateObject var model: Register = Register()
+struct LoginView: View {
+    @StateObject var model: Login = Login()
     @State var isProcessing: Bool = false
     
     var body: some View {
@@ -19,7 +18,12 @@ struct RegisterView: View {
                 .font(.system(size: 32))
             
             VStack {
-                TextField("Nickname", text: $model.nickname)
+                TextField("Username", text: $model.username)
+                    .frame(minHeight: 28)
+                    .padding(10)
+                    .overlay(RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color(.systemGray5), lineWidth: 1))
+                SecureField("Password", text: $model.password)
                     .frame(minHeight: 28)
                     .padding(10)
                     .overlay(RoundedRectangle(cornerRadius: 8)
@@ -27,11 +31,11 @@ struct RegisterView: View {
                     .padding([.bottom], 100)
                 
                 Button(action: {
-                   Task {
-                       self.isProcessing.toggle()
-                       await self.model.register()
-                       self.isProcessing.toggle()
-                   }
+                    Task {
+                        self.isProcessing.toggle()
+                        await model.login()
+                        self.isProcessing.toggle()
+                    }
                 }) {
                     ZStack {
                         Image("busy")
@@ -39,14 +43,14 @@ struct RegisterView: View {
                             .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: self.isProcessing)
                             .opacity(self.isProcessing ? 1 : 0)
                         
-                        Text("Register")
+                        Text("Login")
                             .opacity(self.isProcessing ? 0 : 1)
                             .frame(maxWidth:.infinity)
                     }
                 }
                 .disabled(self.isProcessing)
                 .fullScreenCover(isPresented: $model.navigate) {
-                    PasskeyView()
+                    RegisterView()
                 }
                 .alert(isPresented: $model.isPresentingErrorAlert,
                     content: {
@@ -65,8 +69,8 @@ struct RegisterView: View {
     }
 }
 
-struct RegisterView_Previews: PreviewProvider {
+struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterView()
+        LoginView()
     }
 }

@@ -1,8 +1,7 @@
 //
-//  Login.swift
-//  passkey_app
+// Login.swift
 //
-//  Created by Craig Pearson on 11/10/2022.
+// Copyright contributors to the PasskeyApp
 //
 
 import Foundation

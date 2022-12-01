@@ -1,8 +1,7 @@
 //
-//  PasskeyLogin.swift
-//  passkey_app
+// PasskeyLogin.swift
 //
-//  Created by Craig Pearson on 14/10/2022.
+// Copyright contributors to the PasskeyApp
 //
 
 import Foundation
@@ -58,8 +57,7 @@ class PasskeyLogin: NSObject, ObservableObject {
     }
     
     func fetchAssertionChallenge() async throws -> String {
-        let token = Login.fetchTokenInfo(token: token)
-        let result = try await client.challenge(type: .assertion, token: token)
+        let result = try await client.challenge(type: .assertion)
         return result.challenge
     }
     
@@ -69,8 +67,9 @@ class PasskeyLogin: NSObject, ObservableObject {
         let result = try await client.signin(signature: assertion.signature,
                                              clientDataJSON: assertion.rawClientDataJSON,
                                              authenticatorData: assertion.rawAuthenticatorData,
-                                             credentialId: assertion.credentialID)
-        
+                                             credentialId: assertion.credentialID,
+                                             userId: assertion.userID)
+                                                   
         // Encode the token to a string.
         let data = try JSONEncoder().encode(result)
         DispatchQueue.main.async {
