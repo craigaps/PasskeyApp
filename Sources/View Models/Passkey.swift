@@ -1,7 +1,5 @@
 //
-// Passkey.swift
-//
-// Copyright contributors to the PasskeyApp
+// Copyright contributors to the IBM Security Verify Passkey Sample App
 //
 
 import Foundation

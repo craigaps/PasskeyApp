@@ -1,8 +1,7 @@
 //
-// PasskeyView.swift
+// Copyright contributors to the IBM Security Verify Passkey Sample App
 //
-// Copyright contributors to the PasskeyApp
-//
+
 import SwiftUI
 
 struct PasskeyView: View {
